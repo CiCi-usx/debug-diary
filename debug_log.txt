@@ -33,4 +33,745 @@ OS: Debian12.13.0
 
 Debian got it at 2026-01-22T120719
 
+# === 同步命令 ===
 
+# PowerShell 7 (管理员)
+cd "D:\ProgramData\MDFiles\debug-diary"
+git pull origin main
+# 编辑后：
+git add debug_log.txt
+git commit -m "Win更新 $(Get-Date -Format 'yyMMdd-HHmm')"
+git push origin main
+
+# Git Bash / CMD
+cd /d "D:\ProgramData\MDFiles\debug-diary"
+git pull origin main
+# 编辑后：
+git add debug_log.txt
+git commit -m "Win更新 %date:~5,2%%date:~8,2%-%time:~0,2%%time:~3,2%"
+git push origin main
+
+# Debian/Linux
+cd ~/debug-diary
+git pull origin main
+# 编辑后：
+git add debug_log.txt
+git commit -m "Deb更新 $(date '+%m%d-%H%M')"
+git push origin main
+# 先删除当前目录内容
+Remove-Item -Recurse -Force * -ErrorAction SilentlyContinue
+
+
+
+#Fail to network
+
+
+systemctl list-unit-files | grep -i network
+
+
+# 编辑网络配置
+sudo nano /etc/network/interfaces
+
+# 有线网卡（已存在）
+auto enp8s0
+iface enp8s0 inet dhcp
+
+# 无线网卡配置
+auto wlp2s0
+iface wlp2s0 inet dhcp
+    wpa-ssid "CMCC-FHY-2.4G"
+    wpa-psk "3322816OK"
+	
+	
+# 1. 停止传统网络服务
+sudo systemctl stop networking
+
+# 2. 启用接口
+sudo ip link set wlp2s0 up
+
+# 3. 启动wpa_supplicant
+sudo wpa_supplicant -B -i wlp2s0 -c /etc/wpa_supplicant/wpa_supplicant.conf
+
+# 4. 获取IP地址
+sudo dhclient wlp2s0
+
+# 5. 测试连接 fail
+ping -c 3 8.8.8.8
+
+sudo nano /etc/network/interfaces
+
+source /etc/network/interfaces.d/*
+
+auto lo
+iface lo inet loopback
+
+# 有线网卡 - 使用静态IP（注释掉DHCP配置）
+auto enp8s0
+iface enp8s0 inet static
+    address 192.168.10.211/24
+    gateway 192.168.10.1
+    dns-nameservers 223.5.5.5 8.8.8.8
+    dns-search homenet
+
+# 无线网卡 - 使用DHCP
+auto wlp2s0
+iface wlp2s0 inet dhcp
+    wpa-ssid "CMCC-FHY-2.4G"
+    wpa-psk "3322816OK"
+	
+	
+	
+# 重启网络服务
+sudo systemctl restart networking
+
+# 检查服务状态
+sudo systemctl status networking
+
+# 检查接口状态
+ip addr show
+
+# 启用有线网卡
+sudo ip link set enp8s0 up
+
+# 启用无线网卡
+sudo ip link set wlp2s0 up
+
+ip link show
+
+
+lsmod | grep iwl
+
+lspci -knn | grep -iA2 ethernet
+
+lsmod | grep iwl
+返回值含iwlwifi iwldvm
+lspci -knn | grep -iA2 ethernet
+返回值08:00.0 Ethernet controller 0200 realtek semiconductor co ltd rtl 8111n 8168 8411 pci express gigabit ethernet controller 10ec 8168 rev 07 subsystem lenove rtl 8111 8168 8211 8411 pci express gigabit ethernet controller 17aa 5004
+kernel driver in use r8169 
+kernel mmodules" r8169 
+时间14点42分
+
+Realtek有线网卡驱动：https://github.com/smlinux/rtl8168-dkms
+
+下载 rtl8168-dkms_8.049.02-1_all.deb
+
+ pool/non-free-firmware/f/firmware-nonfree/ firmware-realtek_20230210-5_all.deb 
+ 
+ 
+ mount | grep sd
+
+
+/dev/sda1 on / type ext4 (rw,relatime,errors=remount-ro)
+cgroup2 on /sys/fs/cgroup type cgroup2 (rw,nosuid,nodev,noexec,relatime,nsdelegate,memory_recursiveprot)
+gvfsd-fuse on /run/user/1000/gvfs type fuse.gvfsd-fuse (rw,nosuid,nodev,relatime,user_id=1000,group_id=1000)
+/dev/sdb1 on /media/cici/3088-2761 type exfat (rw,nosuid,nodev,relatime,uid=1000,gid=1000,fmask=0022,dmask=0022,iocharset=utf8,errors=remount-ro,uhelper=udisk2)
+
+cd /media/cici/3088-2761
+ls *.deb
+
+firmware-realtek_20230210-5_all.deb
+
+sudo dpkg -i firmware-realtek_20230210-5_all.deb
+
+# 1. 卸载旧的Realtek驱动
+sudo modprobe -r r8169
+
+# 2. 加载新的r8168驱动
+sudo modprobe r8168
+
+
+# 查看是否安装了rtl8168-dkms
+dpkg -l | grep rtl8168
+
+返回值空
+
+# 查看dkms状态
+sudo dkms status
+
+sudo:dkms: command not found
+
+# 查看固件文件是否已安装
+ls /lib/firmware/rtl_nic/ | grep rtl8168
+
+rtl8168d-1.fw
+rtl8168d-2.fw
+rtl8168e-1.fw
+rtl8168e-2.fw
+rtl8168e-3.fw
+rtl8168f-1.fw
+rtl8168f-2.fw
+rtl8168fp-3.fw
+rtl8168g-1.fw
+rtl8168g-2.fw
+rtl8168g-3.fw
+rtl8168h-1.fw
+rtl8168h-2.fw
+
+ls /lib/firmware/ | grep iwlwifi-2
+
+iwlwifi-2000-6.ucode
+iwlwifi-2030-6.ucode
+
+sudo nano /etc/modprobe.d/r8169-fix-by-ds.conf
+
+# Realtek RTL8111/8168/8411 fix by DeepSeek
+# Created: $(date)
+# Problem: Network interface stays DOWN
+# Solution: Optimize driver parameters
+
+# Disable ASPM power management (causes instability)
+options r8169 aspm=0
+
+# Force 100M full duplex (compatibility fix)
+options r8169 speed=100 duplex=full autoneg=off
+
+# Disable Energy Efficient Ethernet
+options r8169 eee=0
+
+# Increase buffer sizes
+options r8169 rx_copybreak=4096 tx_copybreak=4096
+
+# 重新加载驱动
+sudo modprobe -r r8169
+sleep 2
+sudo modprobe r8169
+sudo modprobe iwlwifi
+sudo modprobe iwldvm
+
+
+sudo update-initramfs -u
+
+# 启用接口
+sudo ip link set enp8s0 up
+sudo ip link set wlp2s0 up
+
+# 检查
+ip link show enp8s0 wlp2s0
+
+
+# 查看当前加载的Realtek驱动
+lsmod | grep r8169
+
+r8169
+mdio_devres
+libphy
+
+# 查看网络接口对应的驱动
+sudo lshw -c network
+
+sudo lshw command not found
+
+
+dpkg -L firmware-realtek | grep rtl8168
+
+/lib/firmware/rtl_nic/rtl8168d-1.fw
+/lib/firmware/rtl_nic/rtl8168d-2.fw
+/lib/firmware/rtl_nic/rtl8168e-1.fw
+/lib/firmware/rtl_nic/rtl8168e-2.fw
+/lib/firmware/rtl_nic/rtl8168e-3.fw
+/lib/firmware/rtl_nic/rtl8168f-1.fw
+/lib/firmware/rtl_nic/rtl8168f-2.fw
+/lib/firmware/rtl_nic/rtl8168fp-3.fw
+/lib/firmware/rtl_nic/rtl8168g-1.fw
+/lib/firmware/rtl_nic/rtl8168g-2.fw
+/lib/firmware/rtl_nic/rtl8168g-3.fw
+/lib/firmware/rtl_nic/rtl8168h-1.fw
+/lib/firmware/rtl_nic/rtl8168h-2.fw
+
+
+modprobe -r r8169
+modprobe -r r8168
+not found
+modprobe r8168
+modprobe fatal module r8168 not found in directory /lib/modules/6.1.0-42-amd64
+
+lspci -nn | grep -i wireless
+
+02:00.0 Network controller [0280]: Internet Corporation Centrino Wireless-N 2230 [8086:0888] (rev c4)
+
+modprobe -r iwlwifi
+
+fatal in use
+ip link set wlan0 down
+
+su root
+
+# 1. 先禁用 wlan0 接口，释放驱动占用（关键！）
+ip link set wlan0 down
+
+# 2. 强制重置 iwlwifi 驱动（热重载，保留参数）
+echo 1 > /sys/bus/pci/drivers/iwlwifi/0000:02:00.0/reset
+
+# 3. 重新加载驱动并启用 rfkill_sw=0 参数（核心解锁）
+# 先临时添加驱动参数到内核
+echo "options iwlwifi rfkill_sw=0" > /etc/modprobe.d/iwlwifi.conf
+
+modprobe -i iwlwifi  # -i 表示强制重新加载，忽略 in use
+
+# 5. 启用 wlan0 接口（此时已绕开 rfkill 封锁）
+ip link set wlan0 up
+
+su root
+
+# 1. 解除 RF-kill 封锁（针对 wlp2s0）
+rfkill unblock all 2>/dev/null  # 即使没装rfkill也不报错
+
+# 2. 启用 wlp2s0 接口（核心！替换之前的 wlan0）
+ip link set wlp2s0 up
+
+# 3. 验证状态（显示 UP 即为成功）
+ip link show wlp2s0
+
+su root
+
+# 查看本次启动的内核参数（确认包含 iwlwifi.rfkill_sw=0）
+cat /proc/cmdline | grep rfkill_sw
+
+# 查看 iwlwifi 驱动是否加载了该参数
+dmesg | grep -i "iwlwifi.*rfkill_sw"
+iwlwifi unkown parameter 'rfkill_sw' ignored
+
+echo $PATH
+输出包含 /usr/bin
+
+echo 1 > /sys/bus/pci/drivers/iwlwifi/0000:02:00.0/reset
+
+# 查看内核日志，确认重置动作
+dmesg | grep -i "iwlwifi.*reset"
+无输出
+
+ip link show wlp2s0
+
+wlp2s0 state down
+
+rfkill unblock all
+
+iw dev wlp2s0 scan | grep -i ssid
+
+command failed: No such device (-19)
+
+lspci | grep -i "Network\|Wireless"
+
+
+# 1. 卸载所有相关驱动（按依赖倒序）
+modprobe -r iwldvm iwlwifi mac80211 cfg80211
+
+# 2. 按正确依赖顺序重新加载驱动（关键！）
+modprobe cfg80211
+modprobe mac80211
+modprobe iwlwifi
+modprobe iwldvm
+
+udevadm trigger --subsystem-match=net --action=change
+# 或用简化版
+# udevadm trigger -s net -c change
+
+# 4. 重启网络服务（兜底）
+systemctl restart systemd-networkd
+
+# 5. 查看真实接口名
+ip link show
+wpa_cli -i wlan0 status
+wpa_state=INACTIVE
+
+ifupdown、rfkill、firmware-linux、firmware-iwlwifi、wpasupplicant、wireless-tools
+
+18点52分
+
+# 1. 先挂载U盘（用你查到的挂载点）
+mount /dev/sdb1 /media/cici/3088-2761
+
+# 2. 进入U盘目录，确认deb包存在
+cd /media/ci/3088-2761/3088-2761
+ls  # 能看到你下载的xxx.deb包，比如 ifupdown_*.deb
+
+# 3. 把所有deb包拷贝到/tmp目录（关键！避开FAT文件系统问题）
+cp *.deb /tmp/
+
+# 4. 安全卸载U盘（拷贝完就可以拔了）
+umount /media/ci/3088-2761
+
+fuser -v /media/ccc/3088-2761
+用户 进程号 权限 命令
+/media/cici/3088-2761:
+root kernel mount /media/cici/3088-2761
+root 1865 ..c.. bash
+
+su root
+# 确保还在/tmp目录（如果切换后目录变了，先切回去）
+cd /tmp
+
+# 批量安装所有deb包（现在有权限了）
+dpkg -i *.deb
+ifup --version && rfkill --version && wpa_supplicant --version
+未找到命令
+echo 'export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin' >> /root/.bashrc
+source /root/.bashrc
+
+WSL2 sudo -i
+mv /etc/apt/sources.list /etc/apt/sources.list.bak
+cat > /etc/apt/sources.list << EOF
+deb http://deb.debian.org/debian bookworm main contrib non-free-firmware
+deb http://deb.debian.org/debian bookworm-updates main contrib non-free-firmware
+deb http://security.debian.org/debian-security bookworm-security main contrib non-free-firmware
+EOF
+apt update
+apt install -y apt-offline
+# 生成依赖清单（包含你需要的工具+所有依赖）
+apt-offline set /root/deps.txt --install "firmware-linux ifupdown wpasupplicant wpa_supplicant wireless-tools"
+# 下载所有包并打包（会自动处理依赖）
+apt-offline get /root/deps.txt -d /root/debian_pkgs --bundle /root/all_pkgs.tar.gz
+
+apt update && apt downloadvvvvv
+python3-magic
+
+ls /root/*.deb
+
+mkdir -p /mnt/k && mount -t drvfs K: /mnt/k
+cp /root/python3-magic_deb12.deb /mnt/k/
+cd /root/
+apt download python3-magic $(apt-cache depends --recurse --no-recommends --no-suggests python3-magic | grep -E '^\w+' | sort -u)
+sudo apt-get update
+find / -name "apt-offline*.deb" 2>/dev/null
+apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests \
+  --no-conflicts --no-breaks --no-replaces --no-enhances \
+  --no-pre-depends python3-magic | grep "^\w" | sort -u)
+# 备份并清空原有 temp 目录下的源
+sudo rm -rf /etc/apt/sources.list.d/temp
+sudo mkdir -p /etc/apt/sources.list.d/temp
+sudo tee /etc/apt/sources.list.d/temp/debian12.list > /dev/null << EOF
+deb [arch=amd64] http://deb.debian.org/debian bookworm main
+deb [arch=amd64] http://deb.debian.org/debian bookworm-updates main
+deb [arch=amd64] http://security.debian.org/debian-security bookworm-security main
+EOF
+
+# 禁用系统原有 Debian 13 源（临时，避免干扰）
+sudo mv /etc/apt/sources.list /etc/apt/sources.list.bak
+sudo touch /etc/apt/sources.list
+sudo tee /etc/apt/apt.conf.d/99defaultrelease > /dev/null << EOF
+APT::Default-Release "bookworm";
+EOF
+
+# 更新源缓存（仅 Debian 12 源）
+sudo apt-get update
+cd /root
+
+# 递归查询 Debian 12 下 python3-magic 的核心依赖
+DEPENDS=$(apt-cache depends --recurse --no-recommends --no-suggests \
+  --no-conflicts --no-breaks --no-replaces --no-enhances \
+  --no-pre-depends python3-magic | grep "^\w" | sort -u)
+
+# 批量下载依赖包
+apt-get download $DEPENDS
+-bash: lh: command not found
+root@PCofZhang:/etc/apt/sources.list.d# ls
+root@PCofZhang:/etc/apt/sources.list.d# dir
+root@PCofZhang:/etc/apt/sources.list.d# dir
+root@PCofZhang:/etc/apt/sources.list.d# cd /etc/apt/sources.list.d/temp
+-bash: cd: /etc/apt/sources.list.d/temp: No such file or directory
+root@PCofZhang:/etc/apt/sources.list.d# # 备份并清空原有 temp 目录下 的源
+sudo rm -rf /etc/apt/sources.list.d/temp
+sudo mkdir -p /etc/apt/sources.list.d/temp
+sudo tee /etc/apt/sources.list.d/temp/debian12.list > /dev/null << EOF
+deb [arch=amd64] http://deb.debian.org/debian bookworm main
+deb [arch=amd64] http://deb.debian.org/debian bookworm-updates main
+deb [arch=amd64] http://security.debian.org/debian-security bookworm-security main
+EOF
+
+# 禁用系统原有 Debian 13 源（临时，避免干扰）
+sudo mv /etc/apt/sources.list /etc/apt/sources.list.bak
+sudo touch /etc/apt/sources.list
+root@PCofZhang:/etc/apt/sources.list.d# sudo tee /etc/apt/apt.conf.d/99defaultrelease > /dev/null << EOF
+APT::Default-Release "bookworm";
+EOF
+
+# 更新源缓存（仅 Debian 12 源）
+sudo apt-get update
+Reading package lists... Done
+root@PCofZhang:/etc/apt/sources.list.d# cd /root
+
+# 递归查询 Debian 12 下 python3-magic 的核心依赖
+DEPENDS=$(apt-cache depends --recurse --no-recommends --no-suggests \
+  --no-conflicts --no-breaks --no-replaces --no-enhances \
+  --no-pre-depends python3-magic | grep "^\w" | sort -u)
+
+# 批量下载依赖包
+apt-get download $DEPENDS
+E: The value 'bookworm' is invalid for APT::Default-Release as such a release is not available in the sources
+E: The value 'bookworm' is invalid for APT::Default-Release as such a release is not available in the sources
+root@PCofZhang:~#
+# 1. 检查临时源文件内容是否正确
+cat /etc/apt/sources.list.d/temp/debian12.list
+
+# 2. 手动指定源更新（强制用 bookworm 源）
+sudo apt-get update -o Dir::Etc::sourcelist="sources.list.d/temp/debian12.list" -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0"
+
+# 3. 验证是否能识别 bookworm 发行版
+apt-cache policy | grep bookworm
+
+cat /root/python3-magic-debian12-deps.txt
+cdebconf
+gcc-14-base
+
+libdebian-installer4
+libexpat1
+libffi8
+
+libgdbm6t64
+libgdbm-compat4t64
+libreadline8t64
+libssl3t64
+libtextwrap1 ---
+libtinfo6
+libuuid1
+libzstd1
+mailcap
+media-types
+mime-support
+netbase
+openssl-provider-legacy
+perl
+perl-base
+python3
+python3-magic
+readline-common
+tzdata
+zlib1g
+
+sudo wpa_cli -i wlp2s0 status
+inactivate
+192.168.10.211
+
+# 停止所有相关进程
+sudo killall wpa_supplicant dhclient dhcpcd
+
+# 确认接口是UP状态
+sudo ip link set wlp2s0 down
+sudo ip link set wlp2s0 up
+
+# 确保使用正确的配置
+sudo tee /etc/wpa_supplicant.conf << EOF
+ctrl_interface=/var/run/wpa_supplicant
+ctrl_interface_group=0
+update_config=1
+
+network={
+    ssid="CMCC-FHY-2.4G"
+    psk="3322816OK"
+    scan_ssid=1
+    key_mgmt=WPA-PSK
+    proto=RSN
+    pairwise=CCMP
+    auth_alg=OPEN
+}
+EOF
+
+# 在前台运行查看错误信息
+sudo wpa_supplicant -D nl80211,wext -i wlp2s0 -c /etc/wpa_supplicant.conf -d
+
+
+# 按 Ctrl+C 停止前台运行的wpa_supplicant
+# （你已经在qterminal中看到连接成功）
+
+# 使用 -B 参数让它在后台运行
+sudo wpa_supplicant -B -D nl80211,wext -i wlp2s0 -c /etc/wpa_supplicant.conf
+# 查看进程
+ps aux | grep wpa_supplicant | grep -v grep
+
+# 检查连接状态
+sudo wpa_cli -i wlp2s0 status
+# 应该显示：wpa_state=COMPLETED
+
+# 使用dhclient获取IP
+sudo dhclient wlp2s0
+
+# 或者使用dhcpcd（如果已安装）
+sudo dhcpcd wlp2s0
+no
+
+# 查看IP地址
+ip addr show wlp2s0
+
+# 测试连接
+ping -c 3 8.8.8.8
+ping -c 3 baidu.com
+
+# 停止手动运行的wpa_supplicant
+sudo killall wpa_supplicant
+
+# 启动NetworkManager
+sudo systemctl start NetworkManager
+
+# 让NetworkManager发现并接管现有连接
+sudo nmcli device connect wlp2s0
+
+sudo killall wpa_supplicant dhclient 2>/dev/null
+sudo systemctl restart NetworkManager
+
+# 添加WiFi连接配置
+sudo nmcli connection add type wifi con-name "CMCC-FHY" ifname wlp2s0 ssid "CMCC-FHY-2.4G"
+
+# 设置安全类型和密码
+sudo nmcli connection modify "CMCC-FHY" wifi-sec.key-mgmt wpa-psk
+sudo nmcli connection modify "CMCC-FHY" wifi-sec.psk "3322816OK"
+
+# 启用自动连接
+sudo nmcli connection modify "CMCC-FHY" connection.autoconnect yes
+
+# 激活连接
+sudo nmcli connection up "CMCC-FHY"
+
+# 查看所有连接配置
+nmcli connection show
+
+# 删除可能冲突的配置
+sudo nmcli connection delete "CMCC-FHY" 2>/dev/null
+sudo nmcli connection delete "wlp2s0" 2>/dev/null
+# 启动文本配置界面
+sudo nmtui
+
+# 选择 "Edit a connection"
+# 选择 "Add" → "WiFi"
+# 填写：
+#   Profile name: CMCC-FHY
+#   Device: wlp2s0
+#   SSID: CMCC-FHY-2.4G
+#   Security: WPA & WPA2 Personal
+#   Password: 3322816OK
+# 保存并激活
+ip -4 addr show wlp2s0 | grep -oP '(?<=inet\s)\d+(\.\d+){3}'
+
+192.168.10.213
+192.168.10.212
+
+ip route show default
+default via 192.168.10.1 dev enp8s0
+default via 192.168.10.` dev wlp2s0 proto dhcp src 192.168.10.212 metric 3003
+nmcli connection show
+
+sudo nmcli connection up "CMCC-FHY"
+
+
+# 停止手动运行的wpa_supplicant
+sudo killall wpa_supplicant
+
+# 启动NetworkManager
+sudo systemctl start NetworkManager
+
+# 让NetworkManager发现并接管现有连接
+sudo nmcli device connect wlp2s0
+
+sudo tee /etc/netplan/01-wifi.yaml << 'EOF'
+network:
+  version: 2
+  renderer: NetworkManager
+  wifis:
+    wlp2s0:
+      dhcp4: true
+      dhcp6: true
+      optional: true
+      access-points:
+        "CMCC-FHY-2.4G":
+          password: "3322816OK"
+EOF
+
+sudo netplan try
+# 检查缩进（应该是2空格，不是tab）
+cat -A /etc/netplan/01-wifi.yaml
+# 应该看到空格（^I 表示tab，$ 表示行尾）
+
+# 或者使用 yamllint
+sudo apt install yamllint -y
+yamllint /etc/netplan/01-wifi.yaml
+/etc/netplan/01-wifi.yaml
+  1:1	warning missing document start "---" (document-start)
+  8:11 error syntax error: expected <block end>, but found '<block mapping start>' (syntax)
+  
+# 如果一切正常，确保开机自启
+sudo systemctl enable NetworkManager
+
+# 查看NetworkManager管理的连接
+nmcli connection show --active
+
+curl -I https://github.com
+curl -I https://api.github.com/repos/CiCi-usx/debug-diary
+sudo nmcli device wifi list
+git push -u origin main
+git remote remove origin 2>/dev/null
+git remote add origin https://github.com/CiCi-usx/debug-diary.git
+sudo nmcli device wifi connect "iPhoneC" password "你的热点密码"
+s
+
+Debian 12 after i got log of connman and select it and i opened firefox and sign in 163 mail and open a letter paper and go back to qterminal and select the out put and went back to 163 to paste the text the pc crushed down and the power blue light went down.
+
+
+PS C:\Users\23227> cat ~/.ssh/id_ed25519.pub
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDFmOrEbA7M5ZkWujg4cW3DKC1OGbFvv8BeeuuKr+IIJ 23227@PCofZhang
+PS C:\Users\23227
+
+
+
+
+# 1. 在iPhone浏览器访问：
+#    https://github.com/new
+# 2. 创建仓库：debug-diary
+# 3. 不要初始化任何文件！
+# 4. 点击 Create
+第二步：推送
+bash
+cd ~/debug-diary
+git remote remove origin
+git remote add origin https://github.com/CiCi-usx/debug-diary.git
+git push -u origin main
+
+## 以下部分是 suggested by LLM deepseek but not be used
+else {
+# 1. 停止网络服务
+sudo systemctl stop networking
+
+# 2. 手动启动wpa_supplicant
+sudo wpa_supplicant -B -i wlp2s0 -c <(wpa_passphrase "CMCC-FHY-2.4G" "3322816OK")
+
+# 3. 获取IP地址
+sudo dhclient -v wlp2s0
+
+# 4. 测试连接
+ping -c 3 8.8.8.8
+} else {
+# 查看wpa_supplicant状态
+sudo wpa_cli -i wlp2s0 status
+
+# 查看关联的AP
+sudo iw dev wlp2s0 link
+
+# 查看信号强度
+sudo iw dev wlp2s0 station dump
+} else {
+# 查看是否关联到AP
+sudo iw dev wlp2s0 link
+
+# 如果没有输出，说明没有连接成功
+# 尝试重新扫描
+sudo iw dev wlp2s0 scan | grep "CMCC-FHY"
+} else {
+# 测试DNS
+nslookup google.com
+
+# 如果DNS失败，直接测试IP
+ping -c 3 8.8.8.8
+
+# 如果IP能通但域名不通，手动设置DNS
+echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
+echo "nameserver 223.5.5.5" | sudo tee -a /etc/resolv.conf
+} else {
+# 查看默认网关
+ip route show
+
+# 应该看到类似：
+# default via 192.168.10.1 dev wlp2s0
+
+# 如果没有默认路由，手动添加
+sudo ip route add default via 192.168.10.1 dev wlp2s0
+} else {
+
+}
