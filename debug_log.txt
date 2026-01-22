@@ -1,5 +1,33 @@
+
+=== 同步命令 ===
+# PowerShell 7 (D:\ProgramData\MDFiles\debug-diary)
+cd "D:\ProgramData\MDFiles\debug-diary"
+git pull origin main
+# 编辑后:
+git add debug_log.txt
+git commit -m "Win更新"
+git push origin main
+
+# Git Bash
+cd /d "D:\ProgramData\MDFiles\debug-diary"
+git pull
+git add . ; git commit -m "更新" ; git push
+
+# Debian
+cd ~/debug-diary
+git pull
+git add . ; git commit -m "更新" ; git push
+
+=== 记录开始 ===
 # debug diary
 time: 2026-01-23T092530
 OS: Debian12.13.0
 
 ## Old debug records waiting to be mirated from 23227 the Windows11 PC
+
+
+=== 双向同步测试 ===
+时间: 2026-01-22 12:01:41
+来源: Windows 11
+内容: 测试从Windows推送到GitHub，然后Debian拉取
+
