@@ -775,3 +775,8 @@ sudo ip route add default via 192.168.10.1 dev wlp2s0
 } else {
 
 }
+
+=== Debian got it ===
+time: 2026-01-22T121632
+state: Receive Windows-migrating debug recs successfully
+lines: 782 by Featherpad
