@@ -1,0 +1,116 @@
+sudo apt update && sudo apt upgrade -y
+su -
+ipconfig
+ip
+ip addr show
+ip addr show 
+ip addr show
+ip addr show     
+systemctl status wpa_supplicant
+connmanctl technologies
+connmanctl
+sudo systemctl stop NetworkManager
+dmseg | grep firmware
+sudo apt update
+lspci | grep -i network
+ip link shw
+ip link show
+sudo ip link set wlp2s0 up
+su -
+sudo -
+su -
+sudo nano /etc/modprobe.d/r8169-fix.conf
+su -
+su root
+su - root
+ping 192.168.1.1
+ping 192.168.10.211
+ping 192.168.10.1
+ipconfig
+ip a show
+su -
+exit
+ip link show
+nmcli radio wifi
+sudo iw dev | grep -i type
+su -
+su root
+cd /tmp
+dir
+dpkg -i *.deb
+su root
+umount /media/cici/3088-2761
+ls -lh 
+dpkg -i *.deb
+su -
+cat /etc/apt/sources.list
+sudo tee /etc/apt/sources.list > /dev/null << 'EOF'
+# ========== Debian 12 (bookworm) 最优源配置（嘉兴优先） ==========
+# 1. 浙江大学镜像（本地速度最快，核心主源）
+deb http://mirrors.zju.edu.cn/debian/ bookworm main contrib non-free non-free-firmware
+deb-src http://mirrors.zju.edu.cn/debian/ bookworm main contrib non-free non-free-firmware
+
+# 2. 浙江大学镜像 - 安全更新（优先本地）
+deb http://mirrors.zju.edu.cn/debian-security/ bookworm-security main contrib non-free non-free-firmware
+deb-src http://mirrors.zju.edu.cn/debian-security/ bookworm-security main contrib non-free non-free-firmware
+
+# 3. 浙江大学镜像 - 系统更新
+deb http://mirrors.zju.edu.cn/debian/ bookworm-updates main contrib non-free non-free-firmware
+deb-src http://mirrors.zju.edu.cn/debian/ bookworm-updates main contrib non-free non-free-firmware
+
+# 4. 阿里云镜像（全国兜底，备用源）
+deb http://mirrors.aliyun.com/debian/ bookworm main contrib non-free non-free-firmware
+deb-src http://mirrors.aliyun.com/debian/ bookworm main contrib non-free non-free-firmware
+
+# 5. 华为云镜像（备用兜底）
+deb http://repo.huaweicloud.com/debian/ bookworm main contrib non-free non-free-firmware
+deb-src http://repo.huaweicloud.com/debian/ bookworm main contrib non-free non-free-firmware
+EOF
+
+su -
+sudo iw dev wlp2s0 set power_save off
+su -
+sudo apt apdate
+su -
+sudo wpa_supplicant -B -i wlan0 -c /etc/wpa_supplicant/wpa_supplicant.conf
+su -
+cd ~/debug-diary
+mkdir -p ~/debug-diary
+cd ~/
+cd debug-diary
+git init
+git config --global init.defaultBranch main
+git brach -m main
+git branch -m main
+git remote add origin git@github.com:CiCi-usx/debug-diary.git
+touch debug_log.txt
+echo $USER
+git status
+git add .
+git commit -m "Add debug-diary - $(date '+%Y-%m-$dT%H:%M:%S')"
+git commit -m "Add debug-diary - $(date '+%Y-%m-%dT%H:%M:%S')"
+git add .
+git commit -m "Add debug-diary - $(date '+%Y-%m-%dT%H:%M:%S')"
+git add .
+git commit -m "Add debug-diary - $(date '+%Y-%m-%dT%H:%M:%S')"
+git push -u origin main
+git remote -v
+git remote add origin https://github.com/CiCi-usx/debug-diary.git
+git remote add origin git@github.com/CiCi-usx/debug-diary.git
+git branch -M main
+git push -u origin man
+git push -u origin main
+curl -I https://github.com
+sudo apt install curl
+su -
+systemctl status connman --no-paper -l
+su -
+cmst &
+sudo systemctl status connman --no-pager -l
+su -
+systemctl status connman --no-paper -l
+systemctl status connman --no-pager -l
+pgrep -af connmand
+busctl tree net.connman 2>&1 | head -10
+sudo journalctl -u connman --since "2026-01-22 15:00" --until "2026-01-22 15:10" --no-pager -l
+su -

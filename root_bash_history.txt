@@ -1,0 +1,500 @@
+# 杀死可能占用网卡的进程（如 wpa_supplicant）
+sudo pkill wpa_supplicant set wlp2s0 down
+# 杀死可能占用网卡的进程（如 wpa_supplicant）
+sudo pkill wpa_supplicant
+[200~ set wlp2s0 down
+# 杀死可能占用网卡的进程（如 wpa_supplicant）
+sudo pkill wpa_supplicant~
+# 停止 NetworkManager 服务（最核心的依赖）
+sudo systemctl stop NetworkManager
+# 关闭无线网卡
+sudo ip link set wlp2s0 down
+# 杀死可能占用网卡的进程（如 wpa_supplicant）
+sudo pkill wpa_supplicant
+sudo modprobe -r iwlwifi
+# 重新加载驱动，并直接禁用省电模式（一步到位）
+sudo modprobe iwlwifi power_save=0
+# 验证驱动参数是否生效（查看 power_save 状态）
+cat /sys/module/iwlwifi/parameters/power_save
+# 1. 查找所有占用 iwlwifi 的进程 ID
+sudo lsof | grep iwlwifi | awk '{print $2}' | sort -u > /tmp/iwlwifi_pids
+# 2. 强制杀死这些进程
+sudo xargs kill -9 < /tmp/iwlwifi_pids
+# 3. 卸载并重新加载驱动（此时不会提示被占用）
+sudo modprobe -r iwlwifi
+sudo modprobe iwlwifi power_save=0
+# 4. 重启 NetworkManager
+sudo systemctl restart NetworkManager
+sudo reboot
+sudo iw dev wlp2s0 set power_save off
+rfkill list
+sudo systemctl restart NetworkManager
+sudo nmcli device wifi rescan
+sudo nmcli device wifi list
+sudo nmcli device wifi rescan
+sudo rfkill unblock bluetooth
+rfkill list bluetooth
+sudo rfkill unblock bluetooth
+rfkill list bluetooth
+sudo systemctl restart bluetooth
+rfkill list bluetooth
+ip a show
+sudo ip link set wlp2s0 up
+ip a whow
+ip a show
+rfkill list wifi
+rfkill list all
+ip link show
+sudo apt apdate
+sudo apt update
+sudo apt install -y task-full
+sudo apt install -y task-full
+sudo apt full-upgrade -y
+sudo apt install -y task-full
+sudo apt install wireless-tools
+sudo apt install network-manager
+sudo apt install wpasupplicant
+sudo apt install firmware-linux-nonfree
+sudo systemctl start networkmanager
+sudo systemctl start NetworkManager
+sudo systemctl enable NetworkManager
+sudo nmtui
+sudo nano /etc
+sudo wpa_supplicant -B -i wlan0 -c /etc/wpa_supplicant/wpa_supplicant.conf
+ip a show
+sudo wpa_supplicant -B -i wlp2s0 -c /etc/wpa_supplicant/wpa_supplicant.conf
+sudo dhclient wlan0
+sudo dhclient wlp8s0
+sudo dhclient wlp2s0
+sudo nmtui
+sudo nmcli device wifi rescan
+nmcli device status
+sudo ip link set wlp2s0 uup
+sudo ip link set wlp2s0 up
+ip a show
+nmtui
+sudo nmcli device wifi rescan
+sudo rfkill unblock all
+rfkill list
+sudo wpa_supplicant -B -i wlan0 -c /etc/wpa_supplicant/wpa_supplicant.conf
+sudo wpa_supplicant -B -i wlp2s0 -c /etc/wpa_supplicant/wpa_supplicant.conf
+ip a show
+sudo nmcli device wifi rescan
+ip link show
+nmcli device status
+sudo iwlist wlp2s0 scan | grep ESSID
+sudo nmcli device wifi connect "CMCC-FHY-2.4G" password "3322816OK" ifname wlp2s0
+sudo nmcli device wifi connect "CMCC-FHY-2.4G" password "3322816OK"
+sudo nmcli device wifi list
+sudo nmcli device wifi rescan
+sudo nmcli device wifi rescan
+sudo nmcli device wifi rescan
+sudo systemctl stop NetworkManager
+sudo ip link set wlp2s0 up
+sudo iw dev wlp2s0 scan | grep SSID
+wpa_passphrase "CMCC-FHY-2.4G" "3322816OK" | sudo tee /etc/wpa_supplicant.conf
+sudo wpa_supplicant -B -i wlp2s0 -c /etc/wpa_supplicant.conf
+sudo dhcclient wlp2s0
+sudo dhclient wlp2s0
+sudo wpa_cli -i wlp2s0 status
+sudo killall wpa_supplicant dhclient dhcpcd
+sudo ip link wlp2s0 down
+ip a show
+sudo ip link wlp2s0 down
+sudo ip link set wlp2s0 down
+sudo ip link set wlp2s0 up
+sudo wpa_wupplicant -D nl80211,wext -i wlp2s0 -c /etc/wpa_supplicant.conf -d
+sudo wpa_upplicant -D nl80211,wext -i wlp2s0 -c /etc/wpa_supplicant.conf -d
+sudo wpa_supplicant -D nl80211,wext -i wlp2s0 -c /etc/wpa_supplicant.conf -d
+sudo wpa_supplicant -B -D nl80211,wext -i wlp2s0 -c /etc/wpa_supplicant.conf
+ps aux | grep wpa_supplicant | grep -v grep
+sudo wpa_cli -i wlp2s0 status
+sudo dhcliant wlp2s0
+sudo dhclient wlp2s0
+sudo dhcpcd wlp2s0
+sudo apt update
+sudo apt install dhcpcd
+sudo dhcpcd wlp2s0
+ip a show
+ping 8.8.8.8
+ping baidu.com
+sudo killall wpa_supplicant
+sudo systemctl start NetworkManager
+sudo nmcli device connect wlp2s0
+sudo killall wpa_supplicant dhclient 2>/dev/null
+sudo systemctl restart NetworkManager
+sudo nmcli connection add type wifi con-name "CMCC-FHY" if name wlp2s0 ssid "CMCC-FHY-2.4G"
+sudo nmcli connection add type wifi con-name "CMCC-FHY" ifname wlp2s0 ssid "CMCC-FHY-2.4G"
+sudo nmcli connection modify "CMCC-FHY" wifi-sec.key-mgmt wpa-psk
+sudo nmcli connection modify "CMCC-FHY" wifi-sec.psk "3322816OK"
+sudo nmcli connection modify "CMCC-FHY" connection.autoconnect yes
+sudo nmcli connection up "CMCC-FHY"
+nmcli connection show
+nmtui
+ip a show
+ip route show
+ip -4 addr show wlp2s0 | grep -oP '(?<=inet\s)\d+(\.\d+){3}
+'
+ip -4 addr show wlp2s0 | grep -oP '(?<=inet\s)\d+(\.\d+){3}'
+ip route show default
+cat /etc/resolv.conf
+nslookup baidu.com
+ip -4 addr whow wlp2s0
+ip -4 addr show wlp2s0
+ip -4 addr show wlp2s0
+sudo dhclient -r wlp2s0
+sudo dhclient wlp2s0
+ip -4 addr show wlp2s0
+nmcli connection show
+sudo nmcli connection up "CMCC-FHY-2.4G"
+sudo nmcli connection up "CMCC-FHY"
+mkdir /etc/netplan/
+sudo netplan generate
+sudo apt update
+sudo apt install netplan
+apt search netplan
+sudo apt install netplan.io -y
+sudo netplan try
+sudo netplan try
+sudo netplan try
+sudo netplan try
+sudo netplan try
+sudo netplan try
+sudo netplan try
+sudo netplan try
+cat -A /etc/netplan/01-wifi.yaml
+sudo apt install yamllint -y
+yamllint /etc/netplan/01-wifi.yaml
+yamllint /etc/netplan/01-wifi.yaml
+yamllint /etc/netplan/01-wifi.yaml
+cat -n /etc/netplan/01-wifi.yaml
+sudo vim +12 /etc/netplan/01-wifi.yaml
+sudo apt install vim
+sudo vim +12 /etc/netplan/01-wifi.yaml
+yamllint /etc/netplan/01-wifi.yaml
+sudo sed -n '12p' /etc/netplan/01-wifi.yaml | sed 's/ /./g'
+sudo sed -n '12p' /etc/netplan/01-wifi.yaml | cat -A
+sudo sed -i '12s/[ .\t]*$//' /etc/netplan/01-wifi.yaml
+yamllint /etc/netplan/01-wifi.yaml
+yamllint /etc/netplan/01-wifi.yaml
+sudo netplan generate
+sudo netplan apply
+sudo systemctl restart NetworkManager
+sudo netplan status
+nmcli connection show
+sudo systemctl enable NetworkManager
+nmcli connection show --active
+zgrep " install " /var/log/dpkg.log* | sort -r | head -20
+sudo apt install git -y
+git config --global user.name "CiCi_usx"
+git config --global user.email "52056496+routiyuf@users.noreply.github.co"
+git config --global --unset user.email
+git config --global user.email "52056495+routiyuf@users.noreply.github.com"
+ssh-keygen -t ed25519 -C "52056495+routiyuf@users.noreply.github.com"
+cat ~/.ssh/id_ed25519.pub
+ssh -T git@github.com
+git config --global --list
+mkdir debug-diary
+cd debug-diary
+git init
+sudo apt install curl
+curl -I https://github.com
+ip a
+ip a 
+ip a
+sudo nmcli device wifi list
+sudo nmcli device wifi list
+sudo nmcli device wifi list
+sudo nmcli device wifi list
+sudo nmcli device wifi list
+sudo nmcli device wifi connect "iPhoneC" password "trygitbay"
+sudo nmcli device wifi rescan
+sudo nmcli device wifi rescan
+sudo nmcli device wifi list
+sudo nmcli device wifi rescan
+sudo nmcli device wifi list
+sudo nmcli device wifi connect "iPhoneC" password "trygitbay"
+cd ~/debug-diary
+git status
+head -10 debug_log.txt
+dir
+tree
+sudo apt install tree -y
+tree
+cd /home/cici/debug-diary
+dir
+tree
+git status
+git init
+git add .
+git config --global --add safe.directory /home/cici/debug-diary
+git add .
+git commit -m "submit debug-diary with dir /home/ - $(date  '+%Y-%m-%DT%H:%M%S')"
+git add .
+git commit -m "submit debug-diary with dir /home/ - $(date  '+%Y-%m-%DT%H:%M:%S')"
+git push -u origin main
+git remote add origin https://github.com/CiCi-usx/debug-diary.git
+git push -u origin main
+git remote add origin https://github.com/CiCi-usx/debug-diary.git
+git remote add origin git@github.com:CiCi-usx/debug-diary.git
+git remote remove origin 2>/dev/null
+git remote add origin git@github.com:CiCi-usx/debug-diary.git
+git remote add origin https://github.com/CiCi-usx/debug-diary.git
+git push -u origin main
+git remote remove origin 2>/dev/null
+git remote remove github 2>/dev/null
+git status
+curl -I https://github.com/CiCi-usx/debug-diary.git
+git push -u origin main
+git remote add origin https://github.com/CiCi-usx/debug-diary.git
+git push -u origin main
+git remote add origin git@github.com:CiCi-usx/debug-diary.git
+git push -u origin main
+git remote remove github 2>/dev/null
+git remote remove origin 2>/dev/null
+git remote add origin git@github.com:CiCi-usx/debug-diary.git
+git push -u origin main
+git remote add origin https://github.com/CiCi-usx/debug-diary.git
+git push -u origin main
+git remote add origin https://github.com/CiCi-usx/debug-diary.git
+git remote remove github 2>/dev/null
+git remote remove origin 2>/dev/null
+git remote add origin https://github.com/CiCi-usx/debug-diary.git
+git push -u origin main
+git push -u origin main
+git push -u origin main
+git push -u origin main
+git push -u origin main
+git push -u origin main
+git push -u origin main
+cd /
+cd home
+cd cici
+dir
+cd bug-diary
+cd debug-diaruy
+cd debug-diary
+git remote remove origin
+git remote add origin https://github.com/CiCi-usx/debug-diary.git
+git push -u origin main
+git log --oneline
+git remove --v
+git remove -v
+git remote -v
+git pull origin main
+sudo apt search pwsh
+sudo apt search powershell
+git pull origin main
+cat debug_log.txt
+echo "" >> debug_log.txt
+echo "Debian received at $(date '+%Y-%m-%DT%H%M%S')" >> debeg_log.txt
+cat debug_log.txt
+cd /
+cd home
+cd cici
+cd debug-diary
+dir
+git add .
+git commit -m "Debian ack"
+git push origin main
+git pull origin main
+tail -5 debug_log.txt
+git add .
+git commit -m "Debian received txt successfully"
+git push origin main
+git pull origin main
+git add .
+git commit -m "Debian got it 2"
+git push origin main
+sudo systemctl status connman --no-paper -l
+sudo systemctl status connman
+journalctl -xe | grep -E -i "(connman-gui|connman.ui|Failed|error|exception)" | tail -30
+ls -la /var/crash/*connman* 2>/dev/null || echo "no crash repo about connman"
+ping baidu.com
+ping 8.8.8.8
+ip a show
+nmcli device wifi list
+sudo nmcli device wifi connect "iPhoneC" password "trygitbay"
+  ping baidu.com
+ping 8.8.8.8
+cat /etc/resolv.conf
+ping 8.8.8.8
+  ping baidu.com
+nmcli connection delete "iPhoneC"
+nmcli device wifi connect "iPhoneC" password "trygitbay"
+sudo nmcli connection modify "iPhoneC" ipv4.dns "8.8.8.8 144.144.144.144"
+sudo nmcli connection up "iPhoneC"
+ping baidu.com
+ping -c 2 220.181.38.148
+sudo systemctl restart NetworkManager
+nmcli device wifi connect "iPhoneC" password "trygitbay"
+sudo dhclient wlp2s0
+ip addr show wlp2s0
+nmcli device wifi connect "CMCC-FHY"
+nmcli device wifi connect "CMCC-FHY-2.4G"
+ping baidu.com
+sudo nmcli connecion down "CMCC-FHY-2.4G"
+nmcli connection show
+nmcli connection dowm "CMCC-FHY"
+nmcli connection down "CMCC-FHY"
+nmcli connection up "CMCC-FHY"
+ping 8.8.8.8
+ping 192.168.10.1
+nmcli radio wifi off
+nmcli radio wifi on
+nmcli device wifi connect "CMCC-FHY" password "3322816OK"
+nmcli connection show
+nmcli device wifi list
+nmcli device wifi connect "CMCC-FHY-2.4G" password "3322816OK"
+ping 192.168.1.1
+ping 192.168.10.1
+ip route show
+sudo dhclient wlp2s0
+sudo ip link set enp8s0 up
+sudo dhclient enp8s0
+nmcli radio wifi off
+nmcli radio wifi on
+nmcli device wifi connect "iPhoneC" password "trygitbay"
+ping 8.8.8.8
+dpkg -o | grep -i connman
+dpkg -l | grep -i connman
+cmst
+sudo apt update
+sudo apt install --reinstall libxcb-xinerama0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-shape0 libxcb-sync1 libxcb-xfixes0 libxcb-xkb1 libxkbcommon-x11-0
+# 在终端中设置（临时）
+export DISPLAY=:0
+export QT_QPA_PLATFORM=xcb
+# 然后运行 查看qterminal的输出
+cmst
+echo $XDG_SESSION_TYPE
+ps aux | grep -E "(Xorg|Xwayland)"
+exit
+sudo systemctl status connman --no-pager -l
+# 查看 connman 相关的 D-Bus 策略文件
+ls -la /usr/share/dbus-1/system.d/ | grep -i connman
+# 查看文件内容（通常名为 connman.conf）
+cat /usr/share/dbus-1/system.d/connman.conf
+connmanctl scan wifi
+rfkill list
+lsmod | grep -E "(iwlwifi|ath9k|rt)"
+dmesg | grep -i wifi
+dmesg | grep -i firmware
+connmanctl technologies
+sudo connmanctl disable wifi
+sleep 2
+sudo connmanctl enable wifi
+connmanctl technologies
+connmanctl scan wifi
+connmanctl scan wifi
+ connmanctl services
+connmanctl connect wifi_606c66d714b4_434d43432d4648592d322e3447_managed_psk
+    connmanctl connect wifi_606c66d714b4_6950686f6e6543_managed_psk
+    connmanctl connect wifi_606c66d714b4_434d43432d4648592d322e3447_managed_psk
+   sudo systemctl restart connman
+sudo apt update
+sudo apt install --reinstall connman connman-client
+apt search connman
+apt search cmst
+# 看看将要被清空的是什么（一堆缓存文件和目录）
+ls -la /var/lib/connman/
+# 看看你宝贵的netplan配置安然无恙
+ls -la /etc/netplan/
+现在你可以放心地执行重置命令了：
+# 看看将要被清空的是什么（一堆缓存文件和目录）
+ls -la /var/lib/connman/
+# 看看你宝贵的netplan配置安然无恙
+ls -la /etc/netplan/
+sudo systemctl stop connman
+sudo rm -rf /var/lib/connman/*
+sudo journalctl -u connman --since "2026-01-22 15:00" --until "2026-01-22 15:10" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 15:00" --until "2026-01-22 15:10" --no-pager -l
+sudo journalctl -u connman --since "2026-01-18 15:00" --until "2026-01-19 15:10" --no-pager -l
+sudo journalctl -u connman --since "2026-01-19 15:00" --until "2026-01-19 15:10" --no-pager -l
+sudo journalctl -u connman --since "2026-01-19 15:00" --until "2026-01-20 15:10" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 15:00" --until "2026-01-21 15:10" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 15:00" --until "2026-01-20 23:55" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 15:00" --until "2026-01-20 16:55" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 16:00" --until "2026-01-20 17:55" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 16:00" --until "2026-01-20 18:00" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 18:00" --until "2026-01-20 19:00" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 19:00" --until "2026-01-20 20:00" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 20:00" --until "2026-01-20 21:00" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 20:00" --until "2026-01-20 22:00" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 20:00" --until "2026-01-20 23:00" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 20:00" --until "2026-01-20 24:00" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 20:00" --until "2026-01-21 01:00" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 20:00" --until "2026-01-21 00:00" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 23:00" --until "2026-01-21 00:00" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 23:00" --until "2026-01-20 23:30" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 23:00" --until "2026-01-20 23:05" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 23:00" --until "2026-01-20 23:10" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 23:00" --until "2026-01-20 23:20" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 23:00" --until "2026-01-20 23:30" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 23:20" --until "2026-01-20 23:21" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 23:20" --until "2026-01-20 23:25" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 23:21" --until "2026-01-20 23:22" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 23:22" --until "2026-01-20 23:23" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 23:23" --until "2026-01-20 23:24" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 23:23" --until "2026-01-20 23:29" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 23:23" --until "2026-01-20 23:35" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 23:23" --until "2026-01-20 23:45" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 23:23" --until "2026-01-20 23:59" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 23:23" --until "2026-01-20 23:58" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 23:49" --until "2026-01-20 23:59" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 23:49" --until "2026-01-20 23:50" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 23:49" --until "2026-01-20 23:59" --no-pager -l 
+sudo journalctl -u connman --since "2026-01-20 23:50" --until "2026-01-20 23:51" --no-pager -l 
+sudo journalctl -u connman --since "2026-01-20 23:49" --until "2026-01-20 23:50" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 23:50" --until "2026-01-20 23:51" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 23:50" --until "2026-01-20 23:55" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 23:51" --until "2026-01-20 23:52" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 23:52" --until "2026-01-20 23:53" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 23:53" --until "2026-01-20 23:54" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 23:54" --until "2026-01-20 23:55" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 23:57" --until "2026-01-20 23:56" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 23:55" --until "2026-01-20 23:56" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 23:56" --until "2026-01-20 23:57" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 23:57" --until "2026-01-20 23:58" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 23:58" --until "2026-01-20 23:59" --no-pager -l
+sudo journalctl -u connman --since "2026-01-20 23:59" --until "2026-01-21 00:00" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:01" --until "2026-01-21 00:02" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:01" --until "2026-01-21 00:05" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:01" --until "2026-01-21 00:03" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:01" --until "2026-01-21 00:04" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:04" --until "2026-01-21 00:05" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:04" --until "2026-01-21 00:06" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:05" --until "2026-01-21 00:06" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:05" --until "2026-01-21 00:07" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:05" --until "2026-01-21 00:08" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:05" --until "2026-01-21 00:09" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:09" --until "2026-01-21 00:10" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:09" --until "2026-01-21 00:11" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:09" --until "2026-01-21 00:19" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:09" --until "2026-01-21 00:13" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:09" --until "2026-01-21 00:12" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:09" --until "2026-01-21 00:11" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:11" --until "2026-01-21 00:12" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:12" --until "2026-01-21 00:13" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:13" --until "2026-01-21 00:14" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:14" --until "2026-01-21 00:15" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:14" --until "2026-01-21 00:16" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:16" --until "2026-01-21 00:17" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:16" --until "2026-01-21 00:19" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:16" --until "2026-01-21 00:29" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:19" --until "2026-01-21 00:20" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:20" --until "2026-01-21 00:21" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:21" --until "2026-01-21 00:22" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:22" --until "2026-01-21 00:23" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:23" --until "2026-01-21 00:24" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:24" --until "2026-01-21 00:25" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:25" --until "2026-01-21 00:26" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:26" --until "2026-01-21 00:27" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:27" --until "2026-01-21 00:28" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:28" --until "2026-01-21 00:29" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:28" --until "2026-01-21 00:30" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:30" --until "2026-01-21 00:31" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:30" --until "2026-01-21 00:32" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:30" --until "2026-01-21 00:33" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 00:33" --until "2026-01-21 00:55" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 03:33" --until "2026-01-21 08:44" --no-pager -l
+sudo journalctl -u connman --since "2026-01-21 12:33" --until "2026-01-21 16:44" --no-pager -l
