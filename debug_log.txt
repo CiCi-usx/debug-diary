@@ -776,11 +776,7 @@ sudo ip route add default via 192.168.10.1 dev wlp2s0
 
 }
 
-=== Debian确认接收 ===
-
-=== Windows最终确认 ===
-时间: 2026-01-22 12:26:20
-状态: 双向同步验证完成
-Debian确认已收到: 782行记录
-系统状态: 就绪 ✓
-
+=== Debian got it ===
+time: 2026-01-22T121632
+state: Receive Windows-migrating debug recs successfully
+lines: 782 by Featherpad
