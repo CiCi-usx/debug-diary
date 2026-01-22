@@ -1,0 +1,5 @@
+# debug diary
+time: 2026-01-23T092530
+OS: Debian12.13.0
+
+## Old debug records
