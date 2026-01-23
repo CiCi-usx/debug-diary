@@ -19,6 +19,14 @@ git pull
 git add . ; git commit -m "更新" ; git push
 
 === 记录开始 ===
+
+# 2026-01-23T091922
+ cat /home/cici/.ssh/id_ed25519.pub # Debian12-debug
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPfNZjPS2WQmpum6c9u6wEQfI6psH0m7aKHgdN3KujBW 52056496+CiCi-usx@users.noreply.github.com
+cici@k29:~/debug-diary$ ssh -T git@github.com
+Hi CiCi-usx! You've successfully authenticated, but GitHub does not provide shell access.
+
+
 # debug diary
 time: 2026-01-23T092530
 OS: Debian12.13.0
