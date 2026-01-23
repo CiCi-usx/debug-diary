@@ -1,34 +1,34 @@
+=== 同步命令Ref ===
 
-=== 同步命令 ===
-# PowerShell 7 (D:\ProgramData\MDFiles\debug-diary)
+# Windows
+
+```pwsh
 cd "D:\ProgramData\MDFiles\debug-diary"
 git pull origin main
-# 编辑后:
-git add debug_log.txt
-git commit -m "Win更新"
+git add .
+git commit -m "a Windows update by pwsh"
 git push origin main
-
-# Git Bash
-cd /d "D:\ProgramData\MDFiles\debug-diary"
-git pull
-git add . ; git commit -m "更新" ; git push
+```
 
 # Debian
 cd ~/debug-diary
 git pull
-git add . ; git commit -m "更新" ; git push
+git add . ; git commit -m "a Debian update" ; git push
 
-=== 记录开始 ===
+=== 记录Debug Diary ===
 
-# 2026-01-23T091922
- cat /home/cici/.ssh/id_ed25519.pub # Debian12-debug
+# 2026-01-23T122809, Windows, git-bash
+git pull
+git add . ; git commit -m "a Windows update by git-bash" ; git push
+
+# 2026-01-23T091922, Debian
+cat /home/cici/.ssh/id_ed25519.pub
 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPfNZjPS2WQmpum6c9u6wEQfI6psH0m7aKHgdN3KujBW 52056496+CiCi-usx@users.noreply.github.com
 cici@k29:~/debug-diary$ ssh -T git@github.com
 Hi CiCi-usx! You've successfully authenticated, but GitHub does not provide shell access.
 
 
-# debug diary
-time: 2026-01-23T092530
+# time: 2026-01-23T092530
 OS: Debian12.13.0
 
 ## Old debug records waiting to be mirated from 23227 the Windows11 PC
