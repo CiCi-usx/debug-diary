@@ -17,6 +17,14 @@ git add . ; git commit -m "a Debian update" ; git push
 
 === 记录Debug Diary ===
 
+# 2026-01-25T092611
+cici@k29:~$ sudo apt install -y ethtool iperf3 mtr net-tools
+root@k29:~# sudo apt install -y ethtool iperf3 mtr net-tools
+root@k29:~# ip link
+root@k29:~# sudo ethtool enp8s0
+root@k29:~# while true; do sudo ethtool enp8s0 | grep -E "Link detected|Speed|Duplex"; sleep 2; done
+root@k29:~# while true; do sudo ethtool enp8s0 | grep -E "Link detected|Speed|Duplex"; sleep 10; done
+
 # 2026-01-23T122809, Windows, git-bash
 git pull
 git add . ; git commit -m "a Windows update by git-bash" ; git push
